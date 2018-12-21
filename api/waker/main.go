@@ -8,6 +8,8 @@ import (
 	"log"
 	"fmt"
 	"os"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
 )
 
 func router(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -41,21 +43,25 @@ func getLambdaNamesFromEnv() []string {
 
 
 func Run(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	sess := session.Must(session.NewSessionWithOptions(session.Options{
+		SharedConfigState: session.SharedConfigEnable,
+	}))
 
-	sleeper := lambda.Lambda{
+	client := lambda.New(sess, &aws.Config{Region: aws.String(os.Getenv("AWS_REGION"))})
 
-	}
+	targetLambdas := getLambdaNamesFromEnv()
+	log.Printf("Starting process to invoke %d lambdas\n", len(targetLambdas))
 
 	invocationType := "Event" // Asynchronous
 	lambdaCount := 0
 
-	for _, lambdaName := range getLambdaNamesFromEnv() {
+	for _, lambdaName := range targetLambdas {
 		input := lambda.InvokeInput{
 			FunctionName:   &lambdaName,
 			InvocationType: &invocationType,
 		}
 
-		_, err := sleeper.Invoke(&input)
+		_, err := client.Invoke(&input)
 		if err != nil {
 			log.Fatalf("Error invoking lambda function %s\n. %s\n", lambdaName, err.Error())
 		}
