@@ -13,15 +13,7 @@ import (
 )
 
 func router(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	switch req.HTTPMethod {
-	case "GET":
-		return Run(req)
-	default:
-		response := events.APIGatewayProxyResponse{
-			StatusCode: http.StatusMethodNotAllowed,
-		}
-		return response, nil
-	}
+	return Run(req)
 }
 
 
