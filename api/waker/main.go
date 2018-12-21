@@ -47,6 +47,7 @@ func Run(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, err
 	}
 
 	invocationType := "Event" // Asynchronous
+	lambdaCount := 0
 
 	for _, lambdaName := range getLambdaNamesFromEnv() {
 		input := lambda.InvokeInput{
@@ -58,11 +59,14 @@ func Run(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, err
 		if err != nil {
 			log.Fatalf("Error invoking lambda function %s\n. %s\n", lambdaName, err.Error())
 		}
+		log.Printf("Just invoked lambda named %s\n", lambdaName)
+		lambdaCount += 1
 	}
 
 	response := events.APIGatewayProxyResponse{
 		StatusCode: 200,
 	}
+	log.Printf("Invoked %d lambdas\n", lambdaCount)
 
 	return response, nil
 }
