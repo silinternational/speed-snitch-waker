@@ -1,0 +1,65 @@
+# For full config options, check the docs:
+#    docs.serverless.com
+
+service: speedsnitch-waker
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: go1.x
+  timeout: 300
+  versionFunctions: false
+  apiKeys:
+    - ${self:custom.namespace}-waker
+
+
+  # you can define service wide environment variables here
+  environment:
+    stage: ${self:custom.stage}
+    namespace: ${self:custom.namespace}
+    LAMBDA_FUNCTION1: ${env:LAMBDA_FUNCTION1}
+    LAMBDA_FUNCTION2: ${env:LAMBDA_FUNCTION2}
+    LAMBDA_FUNCTION3: ${env:LAMBDA_FUNCTION3}
+    LAMBDA_FUNCTION4: ${env:LAMBDA_FUNCTION4}
+    LAMBDA_FUNCTION5: ${env:LAMBDA_FUNCTION5}
+    LAMBDA_FUNCTION6: ${env:LAMBDA_FUNCTION6}
+    LAMBDA_FUNCTION7: ${env:LAMBDA_FUNCTION7}
+    LAMBDA_FUNCTION8: ${env:LAMBDA_FUNCTION8}
+    LAMBDA_FUNCTION9: ${env:LAMBDA_FUNCTION9}
+
+  stackTags:
+    app: speedsnitch-waker
+    app_env: ${opt:stage, self:provider.stage}
+
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "lambda:InvokeFunction"
+      Resource: "*"
+
+
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  namespace: ${self:service}_${self:custom.stage}
+
+package:
+ exclude:
+   - ./**
+ include:
+   - ./bin/**
+
+functions:
+
+  waker:
+      handler: bin/waker
+      events:
+        - http:
+            path: waker
+            method: GET
+            private: true
+

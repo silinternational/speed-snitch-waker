@@ -1,0 +1,19 @@
+{
+  "name": "speed-snitch-waker",
+  "description": "A Serverless API for Speed Snitch Waker, to warm up the Speed Snitch Admin lambdas",
+  "dependencies": {
+    "aws-sdk": "^2.187.0"
+  },
+  "engines": {
+    "node": ">=6.5.0 <7.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/silinternational/speed-snitch-waker"
+  },
+  "scripts": {},
+  "devDependencies": {
+    "serverless-domain-manager": "^2.4.0"
+  }
+}
