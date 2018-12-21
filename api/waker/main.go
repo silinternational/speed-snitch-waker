@@ -4,6 +4,7 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"net/http"
 	"github.com/aws/aws-sdk-go/service/lambda"
+	awsLambda "github.com/aws/aws-lambda-go/lambda"
 	"log"
 	"fmt"
 	"os"
@@ -64,4 +65,9 @@ func Run(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, err
 	}
 
 	return response, nil
+}
+
+
+func main() {
+	awsLambda.Start(router)
 }
