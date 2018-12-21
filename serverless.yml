@@ -62,4 +62,5 @@ functions:
             path: waker
             method: GET
             private: true
+      reservedConcurrency: 1 # optional, reserved concurrency limit for this function. By default, AWS uses account concurrency limit
 
